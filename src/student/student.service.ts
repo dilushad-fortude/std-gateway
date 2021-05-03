@@ -13,8 +13,8 @@ export class StudentService {
     
   }
 
-  createMultiple(data:any) {
-    return this.updateClient.send({cmd: 'upload-multiple-students'}, {stdList: data, length: data.length});
+  createMultiple(data:Express.Multer.File) {
+    return this.updateClient.send({cmd: 'upload-multiple-students'}, {stdExeclFile: data});
   }
 
   findAll() {
@@ -29,10 +29,8 @@ export class StudentService {
     return this.client.send({cmd: 'update-student'}, {id: id, studentObj: reqBody})
   }
 
-  remove(id: string) {}
-
-  test() {
-    return this.client.send({ cmd: 'get-all-students' }, '');
+  remove(id: string) {
+    return this.client.send({cmd: 'delete-student'}, {id: id})
   }
 
   create(reqBody: CreateStudentDto) {

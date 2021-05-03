@@ -28,27 +28,8 @@ export class StudentController {
     // }
 
     @Post('upload')
-    @UseInterceptors(FileInterceptor("files", {storage: diskStorage({
-        destination: './uploads',
-        filename: (req,file, cb) => {
-            return cb(null, file.originalname)
-        }
-    })}))
-    async uploadFile(@UploadedFile() files: Express.Multer.File) {
-        const stream = fs.createReadStream( './uploads/'+files.originalname);
-        const stdList = await this.csvParser.parse(stream, Student);
-        console.log(stdList.list.length);
-        var stdMap = [];
-        for(let x =0; x< stdList.list.length; x++) {
-            var stdArr = stdList.list[x]['name,dob,email'].split(",");
-            var stdObj:Student = new Student();
-            stdObj.name = stdArr[0];
-            stdObj.email = stdArr[2];
-            stdObj.dob = stdArr[1];
-            stdMap.push(stdObj);
-        }
-        console.log(stdMap);
-        // return stdMap;
-        return this.studentService.createMultiple(stdMap);
+    @UseInterceptors(FileInterceptor("files"))
+    async uploadFile(@UploadedFile() excelFile: Express.Multer.File) {
+        return this.studentService.createMultiple(excelFile);
     }
 }
