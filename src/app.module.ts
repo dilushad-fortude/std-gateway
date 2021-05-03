@@ -6,6 +6,8 @@ import { RootController } from 'src/root.controller';
 import { StudentService } from './student/student.service';
 import { StudentController } from './student/student.controller';
 import { CsvModule } from 'nest-csv-parser';
+import { StudentResolver } from './student/student.resolver';
+import { GraphQLModule } from '@nestjs/graphql';
 
 @Module({
   imports: [
@@ -19,9 +21,12 @@ import { CsvModule } from 'nest-csv-parser';
       port: 8081
     }},
   ]),
-  CsvModule
+  CsvModule,
+  GraphQLModule.forRoot({
+    autoSchemaFile: 'schema.gql',
+  }),
 ],
   controllers: [RootController, AppController, StudentController],
-  providers: [StudentService],
+  providers: [StudentService, StudentResolver],
 })
 export class AppModule {}

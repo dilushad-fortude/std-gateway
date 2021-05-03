@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { CreateStudentDto } from './dto/create-student.dto';
 import { Student } from './entities/student.entity';
 
 @Injectable()
@@ -24,7 +25,7 @@ export class StudentService {
     return this.client.send({ cmd: 'get-one-student-by-id' },  id);
   }
 
-  update(id: string, reqBody: Student) {
+  update(id: string, reqBody: CreateStudentDto) {
     return this.client.send({cmd: 'update-student'}, {id: id, studentObj: reqBody})
   }
 
@@ -34,8 +35,8 @@ export class StudentService {
     return this.client.send({ cmd: 'get-all-students' }, '');
   }
 
-  create(reqBody: Student) {
-
+  create(reqBody: CreateStudentDto) {
+    return this.client.send({ cmd: 'create-student' }, reqBody);
   }
     
 }

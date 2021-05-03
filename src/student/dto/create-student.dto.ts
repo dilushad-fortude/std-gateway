@@ -1,9 +1,7 @@
 import { Field, Int, ObjectType } from "@nestjs/graphql";
 
 @ObjectType()
-export class Student {
-    @Field(type => Int)
-    id: number;
+export class CreateStudentDto {
 
     @Field({nullable : false})
     name: string;

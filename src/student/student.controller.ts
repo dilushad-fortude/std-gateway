@@ -12,20 +12,20 @@ export class StudentController {
     constructor(private readonly studentService: StudentService,
         private readonly csvParser: CsvParser) { }
 
-    @Get()
-    getStudents() {
-        return this.studentService.findAll();
-    }
+    // @Get()
+    // getStudents() {
+    //     return this.studentService.findAll();
+    // }
 
-    @Get(':id')
-    getOneStudent(@Param('id') id: string) {
-        return this.studentService.findOne(id);
-    }
+    // @Get(':id')
+    // getOneStudent(@Param('id') id: string) {
+    //     return this.studentService.findOne(id);
+    // }
 
-    @Patch(':id')
-    updateStudnet(@Param('id') id: string, @Body() reqBody: Student) {
-        return this.studentService.update(id, reqBody);
-    }
+    // @Patch(':id')
+    // updateStudnet(@Param('id') id: string, @Body() reqBody: Student) {
+    //     return this.studentService.update(id, reqBody);
+    // }
 
     @Post('upload')
     @UseInterceptors(FileInterceptor("files", {storage: diskStorage({
