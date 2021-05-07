@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { Student } from './entities/student.entity';
 
@@ -35,6 +36,10 @@ export class StudentService {
 
   create(reqBody: CreateStudentDto) {
     return this.client.send({ cmd: 'create-student' }, reqBody);
+  }
+
+  createStudentBatch(filename, file): Observable<boolean> {
+    return this.updateClient.send({ cmd: 'student-batch-upload' }, {file: file, filename: filename});
   }
     
 }

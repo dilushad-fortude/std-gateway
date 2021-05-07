@@ -18,12 +18,13 @@ import { GraphQLModule } from '@nestjs/graphql';
     }},
     { name: 'STUDENT_UPDATE_SERVICE', transport: Transport.TCP, options: {
       host: '0.0.0.0',
-      port: 8081
+      port: 8082
     }},
   ]),
   CsvModule,
   GraphQLModule.forRoot({
     autoSchemaFile: 'schema.gql',
+    uploads: false,
   }),
 ],
   controllers: [RootController, AppController, StudentController],

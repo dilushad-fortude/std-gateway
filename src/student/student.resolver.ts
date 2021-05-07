@@ -1,9 +1,11 @@
 import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
-import { CreateStudentDto } from "./dto/create-student.dto";
 import { UpdateStudentDto } from "./dto/update-student.dto";
 import { Student } from "./entities/student.entity";
 import { StudentInput } from "./inputs/student.input";
 import { StudentService } from "./student.service";
+import { createWriteStream } from 'fs';
+import { FileUpload, GraphQLUpload } from "graphql-upload";
+import { Observable } from "rxjs";
 
 @Resolver()
 export class StudentResolver {
@@ -29,9 +31,24 @@ export class StudentResolver {
       return this.studentService.update(id, input);
   }
 
-  @Mutation(() => String)
+  @Mutation(() => Student)
   deleteStudent(@Args('id') id: string) {
       return this.studentService.remove(id);
+  }
+
+  @Mutation(() => Boolean)
+  async uploadFile(@Args({name: 'file', type: () => GraphQLUpload})
+  {
+      createReadStream,
+      filename
+  }: FileUpload) {
+    const chunks = [];
+    for await (let chunk of createReadStream()) {
+        chunks.push(chunk)
+    }
+    
+    const buffer  = Buffer.concat(chunks);
+    return this.studentService.createStudentBatch(filename, buffer);
   }
 
 }
