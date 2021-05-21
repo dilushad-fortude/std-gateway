@@ -1,11 +1,21 @@
-FROM node:13
-WORKDIR /usr/src/app
+FROM node:10
 
-COPY package*.json tsconfig*.json ./
+# Create app directory, this is in our container/in our image
+WORKDIR /stdgateway
+
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
+
 RUN npm install
+# If you are building your code for production
+# RUN npm ci --only=production
 
-COPY src/ src/
+# Bundle app source
+COPY . .
+
 RUN npm run build
-RUN rm -r src
 
-CMD ["npm", "run", "start:prod"]
+EXPOSE 8879
+CMD [ "node", "dist/main" ]

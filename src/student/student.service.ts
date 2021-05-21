@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { CreateStudentDto } from './dto/create-student.dto';
@@ -11,8 +11,9 @@ export class StudentService {
     @Inject('STUDENT_SERVICE') private client: ClientProxy,
     @Inject('STUDENT_UPDATE_SERVICE') private updateClient: ClientProxy
     ) {
-    
   }
+
+  private readonly logger = new Logger(StudentService.name);
 
   createMultiple(data:Express.Multer.File) {
     return this.updateClient.send({cmd: 'upload-multiple-students'}, {stdExeclFile: data});

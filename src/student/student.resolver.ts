@@ -6,10 +6,12 @@ import { StudentService } from "./student.service";
 import { createWriteStream } from 'fs';
 import { FileUpload, GraphQLUpload } from "graphql-upload";
 import { Observable } from "rxjs";
+import { Logger } from "@nestjs/common";
 
 @Resolver()
 export class StudentResolver {
   constructor(private readonly studentService: StudentService) {}
+  private readonly logger = new Logger(StudentResolver.name);
 
   @Mutation(() => Student)
   createStudent(@Args('input') input: StudentInput) {
@@ -23,6 +25,7 @@ export class StudentResolver {
 
   @Query(() => [Student])
   findAllStudents() {
+    console.log("request recieved to find all students");
     return this.studentService.findAll();
   }
 
@@ -42,6 +45,7 @@ export class StudentResolver {
       createReadStream,
       filename
   }: FileUpload) {
+    this.logger.log("req recieved to file upload", filename);
     const chunks = [];
     for await (let chunk of createReadStream()) {
         chunks.push(chunk)

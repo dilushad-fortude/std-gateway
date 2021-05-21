@@ -4,21 +4,21 @@ import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservi
 import { AppController } from './app.controller';
 import { RootController } from 'src/root.controller';
 import { StudentService } from './student/student.service';
-import { StudentController } from './student/student.controller';
 import { CsvModule } from 'nest-csv-parser';
 import { StudentResolver } from './student/student.resolver';
 import { GraphQLModule } from '@nestjs/graphql';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
     ClientsModule.register([
     { name: 'STUDENT_SERVICE', transport: Transport.TCP, options: {
-      host: '0.0.0.0',
-      port: 8080
+      host: process.env.STUDENT_CRUD_SERVICE_HOST,
+      port: parseInt(process.env.STUDENT_CRUD_SERVICE_PORT)
     }},
     { name: 'STUDENT_UPDATE_SERVICE', transport: Transport.TCP, options: {
-      host: '0.0.0.0',
-      port: 8082
+      host: process.env.STUDENT_UPDATE_SERVICE_HOST,
+      port: parseInt(process.env.STUDENT_UPDATE_SERVICE_PORT)
     }},
   ]),
   CsvModule,
@@ -27,7 +27,7 @@ import { GraphQLModule } from '@nestjs/graphql';
     uploads: false,
   }),
 ],
-  controllers: [RootController, AppController, StudentController],
+  controllers: [RootController, AppController],
   providers: [StudentService, StudentResolver],
 })
 export class AppModule {}
